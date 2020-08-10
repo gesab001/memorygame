@@ -1,0 +1,16 @@
+<html>
+
+<body>
+
+<p id="test"></p>
+<script>
+const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const wordliststring = urlParams.get('imagelist');
+  var jsonobject = JSON.parse(wordliststring);
+  var obj = JSON.parse(jsonobject).items;
+  document.getElementById("test").innerHTML = obj; 
+  
+</script>
+</body>
+</html>

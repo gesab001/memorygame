@@ -112,8 +112,9 @@
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const wordliststring = urlParams.get('imagelist');
+  console.log(wordliststring);
   var jsonobject = JSON.parse(wordliststring);
-  var cards = JSON.parse(jsonobject).items;
+  var cards = jsonobject.items;
 
 
   Memory.init(cards);

@@ -1,5 +1,46 @@
 (function () {
 
+  var Images = {
+    getImages: function(){
+
+	const queryString = window.location.search;
+	const urlParams = new URLSearchParams(queryString);
+	const filename = urlParams.get('filename');
+	   var path = "articles/"+filename;
+	  console.log("path : " + path);
+	  // alert(dropboxtoken);
+ 	   var dropboxtoken = "ov1Fn0M5gUgAAAAAAAAAAUH__lAitVjxIuHNTfxKDKUvWPyyElPaTre_sLqx26g2";
+	   var xhttp = new XMLHttpRequest();
+	   xhttp.onreadystatechange = function() {
+	     if (this.readyState == 4 && this.status == 200){
+	       //syncwithLocalStorage(JSON.parse(this.responseText));
+	          var slides = JSON.parse(this.responseText).slides;
+                  var jsonobject = {"items": []};
+                  for (var x=0; x<slides.length; x++) {
+			var name = "name"+x;
+                        var id = x;
+                        var img = slides[x].image;
+                        var item = {"name": name, "img": img, "id": id};
+                        jsonobject.items.push(item);
+                  }
+
+
+		  //var jsonobject = JSON.parse(wordliststring);
+		  var cards = jsonobject.items;
+		  console.log("getImages");
+		  console.log(JSON.stringify(cards));	       
+	   	  Memory.init(cards);
+	     }else{
+
+		 }
+	    };
+	   xhttp.open("POST", "https://content.dropboxapi.com/2/files/download", true);
+	   xhttp.setRequestHeader("Authorization", "Bearer " +dropboxtoken);
+	   xhttp.setRequestHeader("Dropbox-API-Arg", "{\"path\": \"/"+path+"\"}");
+	   xhttp.send();
+	       
+	    }
+  }
   var Memory = {
 
     init: function (cards) {
@@ -109,15 +150,10 @@
       return frag;
     } };
 
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const wordliststring = urlParams.get('imagelist');
-  console.log(wordliststring);
-  var jsonobject = JSON.parse(wordliststring);
-  var cards = jsonobject.items;
 
 
-  Memory.init(cards);
+
+   Images.getImages();
 
 
 })();
